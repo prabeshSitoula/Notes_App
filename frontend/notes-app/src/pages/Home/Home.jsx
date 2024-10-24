@@ -278,10 +278,21 @@ const Home = () => {
   };
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+      return;
+    }
     getAllNotes();
     getUserInfo();
     return () => {};
   }, []);
+
+  const sortedNotes = [...allNotes].sort((a, b) => {
+    if (a.isPinned && !b.isPinned) return -1;
+    if (!a.isPinned && b.isPinned) return 1;
+    return new Date(b.createdOn) - new Date(a.createdOn);
+  });
 
   return (
     <>
@@ -294,7 +305,7 @@ const Home = () => {
       <div className="container mx-auto">
         {allNotes.length > 0 ? (
           <div className="grid grid-cols-3 gap-4 mt-8">
-            {allNotes.map((item, index) => (
+            {sortedNotes.map((item, index) => (
               <NoteCard
                 key={item._id}
                 title={item.title}

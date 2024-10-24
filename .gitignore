@@ -10,3 +10,5 @@ logs/
 
 # Other potential sensitive files
 config/*.json
+ 
+index.js
